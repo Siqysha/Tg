@@ -1,0 +1,29 @@
+from telegram.ext import Updater, MessageHandler, Filters
+
+def start(update, context):
+    user_id = update.effective_chat.id
+    welcome_message = "Привет! Напиши мне что-то! ✏️"
+    context.bot.send_message(chat_id=user_id, text=welcome_message)
+
+def forward_to_user(update, context):
+    user_id = '6004510372'  # Замени 'YOUR_USER_ID' на свой ID в Telegram
+    message_text = update.message.text
+    context.bot.send_message(chat_id=user_id, text=message_text)
+
+def main():
+    # Вставь свой токен бота вместо 'YOUR_BOT_TOKEN'
+    updater = Updater(token='7009572052:AAGTyPte2Gl4LvD8KmBnnXN6Wsk2MVerEAg', use_context=True)
+    dp = updater.dispatcher
+
+    # Обработчик команды /start
+    dp.add_handler(MessageHandler(Filters.command & Filters.regex(r'/start'), start))
+
+    # Обработчик текстовых сообщений
+    dp.add_handler(MessageHandler(Filters.text & ~Filters.command, forward_to_user))
+
+    # Запуск бота
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
